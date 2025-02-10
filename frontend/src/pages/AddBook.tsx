@@ -15,7 +15,7 @@ const AddBook = () => {
         const newBook = { title, genre, author, publicationYear: Number(publicationYear) };
 
         try {
-            await axios.post('http://localhost:8080/api/books', newBook);
+            await axios.post('http://localhost:8080/api/book/add', newBook);
             alert('Buch erfolgreich hinzugefügt!');
             navigate('/');
         } catch (error) {

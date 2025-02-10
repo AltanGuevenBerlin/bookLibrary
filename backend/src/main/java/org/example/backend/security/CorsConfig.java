@@ -13,13 +13,26 @@ public class CorsConfig {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.setAllowedOrigins(List.of("http://localhost:5173")); // Erlaubt React-Frontend
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
 
+        // Credentials erlauben (z.B. für Cookies oder Header)
+        config.setAllowCredentials(true);
+
+        // Erlaubte Ursprünge (React-Frontend)
+        config.setAllowedOrigins(List.of("http://localhost:5173"));
+
+        // Erlaubte HTTP-Methoden
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+
+        // Erlaubte Header
+        config.setAllowedHeaders(List.of("*")); // Alternativ: List.of("Authorization", "Content-Type")
+
+        // Falls du custom Header vom Server an den Client senden willst
+        config.setExposedHeaders(List.of("Authorization"));
+
+        // Konfiguration für alle API-Endpunkte setzen
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/api/**", config); // Nur API-Endpunkte erlauben
+        source.registerCorsConfiguration("/api/**", config);
+
         return new CorsFilter(source);
     }
 }
