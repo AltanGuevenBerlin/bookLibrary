@@ -1,39 +1,134 @@
-import org.example.backend.controller.BookController;
+package org.example.backend.service;
+
 import org.example.backend.model.Book;
-import org.example.backend.service.BookService;
+import org.example.backend.repo.BookRepository;
+import org.example.backend.service.BookServiceImpl;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-@WebMvcTest(BookController.class)
-class BookControllerTest {
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
-    @MockBean
-    private BookService bookService; // Mock für BookService
+class BookServiceTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Mock
+    private BookRepository bookRepository;
+
+    @InjectMocks
+    private BookServiceImpl bookService;
+
+    private Book book;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this); // Mocks initialisieren
+        book = new Book("1", "Test Title", "Test Author", "Test Genre", "2023");
+    }
 
     @Test
-    void testCreateBook() throws Exception {
-        Book book = new Book("Test Title", "Test Author", "Test Genre", 2023);
+    void testCreateBook() {
+        // Arrange
+        when(bookRepository.save(any(Book.class))).thenReturn(book);
 
-        when(bookService.createBook(any(Book.class))).thenReturn(book);
+        // Act
+        Book createdBook = bookService.createBook(book);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/book/add") // Richtige Methode verwendet
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"title\":\"Test Title\",\"author\":\"Test Author\",\"genre\":\"Test Genre\",\"publicationYear\":2023}"))
-                .andExpect(status().isOk()) // Erwarteter Status ist OK
-                .andExpect(jsonPath("$.title").value("Test Title"))
-                .andExpect(jsonPath("$.author").value("Test Author"));
+        // Assert
+        assertNotNull(createdBook);
+        assertEquals("Test Title", createdBook.getTitle());
+        verify(bookRepository, times(1)).save(book);
+    }
+
+    @Test
+    void testGetBookById() {
+        // Arrange
+        when(bookRepository.findById("1")).thenReturn(Optional.of(book));
+
+        // Act
+        Book foundBook = bookService.getBookById("1");
+
+        // Assert
+        assertNotNull(foundBook);
+        assertEquals("Test Title", foundBook.getTitle());
+        verify(bookRepository, times(1)).findById("1");
+    }
+
+    @Test
+    void testGetBookByIdNotFound() {
+        // Arrange
+        when(bookRepository.findById("1")).thenReturn(Optional.empty());
+
+        // Act
+        Book foundBook = bookService.getBookById("1");
+
+        // Assert
+        assertNull(foundBook);
+        verify(bookRepository, times(1)).findById("1");
+    }
+
+    @Test
+    void testGetAllBooks() {
+        // Arrange
+        when(bookRepository.findAll()).thenReturn(Arrays.asList(book));
+
+        // Act
+        List<Book> books = bookService.getAllBooks();
+
+        // Assert
+        assertNotNull(books);
+        assertEquals(1, books.size());
+        assertEquals("Test Title", books.get(0).getTitle());
+        verify(bookRepository, times(1)).findAll();
+    }
+
+    @Test
+    void testDeleteBook() {
+        // Arrange
+        doNothing().when(bookRepository).deleteById("1");
+
+        // Act
+        bookService.deleteBook("1");
+
+        // Assert
+        verify(bookRepository, times(1)).deleteById("1");
+    }
+
+    @Test
+    void testUpdateBook() {
+        // Arrange
+        Book updatedBook = new Book("1", "Updated Title", "Updated Author", "Updated Genre", "2024");
+        when(bookRepository.findById("1")).thenReturn(Optional.of(book));
+        when(bookRepository.save(any(Book.class))).thenReturn(updatedBook);
+
+        // Act
+        Book result = bookService.updateBook(updatedBook);
+
+        // Assert
+        assertNotNull(result);
+        assertEquals("Updated Title", result.getTitle());
+        verify(bookRepository, times(1)).findById("1");
+        verify(bookRepository, times(1)).save(updatedBook);
+    }
+
+    @Test
+    void testUpdateBookNotFound() {
+        // Arrange
+        Book updatedBook = new Book("1", "Updated Title", "Updated Author", "Updated Genre", "2024");
+        when(bookRepository.findById("1")).thenReturn(Optional.empty());
+
+        // Act
+        Book result = bookService.updateBook(updatedBook);
+
+        // Assert
+        assertNull(result);
+        verify(bookRepository, times(1)).findById("1");
+        verify(bookRepository, times(0)).save(any(Book.class));
     }
 }
