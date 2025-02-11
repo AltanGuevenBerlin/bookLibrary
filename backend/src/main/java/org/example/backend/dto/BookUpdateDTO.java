@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class BookUpdateDTO {
     private String title;
     private String author;
-    public String genre;
-    public String publicationYear;
+    private String genre;
+    private String publicationYear;
 }
