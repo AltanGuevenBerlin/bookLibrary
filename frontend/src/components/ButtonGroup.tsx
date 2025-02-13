@@ -7,8 +7,8 @@ const ButtonGroup = () => {
     return (
         <div>
             <button onClick={() => navigate('/add-book')}>Hinzufügen</button>
-            <button onClick={() => navigate('Suche ein bestimmtes Buch')}>Suchen</button>
-            <button onClick={() => alert('Lösche das Buch')}>Entfernen</button>
+            <button onClick={() => navigate('/search-book')}>Suchen</button>
+            <button onClick={() => navigate('/delete-book')}>Entfernen</button>
             <button onClick={() => alert('Verleih das Buch')}>Verleihen</button>
         </div>
     );
