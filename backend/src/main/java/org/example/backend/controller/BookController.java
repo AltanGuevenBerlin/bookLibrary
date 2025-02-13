@@ -24,9 +24,14 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public Book getBookById(@PathVariable String id) {
-        return bookService.getBookById(id);
+    public ResponseEntity<Book> getBookById(@PathVariable String id) {
+        Book book = bookService.getBookById(id);
+        if (book == null) {
+            return ResponseEntity.notFound().build();  // Gibt 404 Not Found zurück, wenn kein Buch gefunden wird
+        }
+        return ResponseEntity.ok(book);  // Gibt 200 OK zurück, wenn Buch gefunden wird
     }
+
 
     @GetMapping("/getAll")
     public List<Book> getAllBooks() {
@@ -57,8 +62,10 @@ public class BookController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteBook(@PathVariable String id) {
+    public ResponseEntity<Void> deleteBook(@PathVariable String id) {
         bookService.deleteBook(id);
+        return ResponseEntity.noContent().build();  // 204 No Content
     }
+
 
 }
