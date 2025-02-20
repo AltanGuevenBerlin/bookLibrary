@@ -63,22 +63,12 @@
                 <version>4.6.1</version> <!-- Aktuelle Version von Mockito -->
                 <scope>test</scope>
             </dependency>
-
-            <!-- JUnit 5 Dependency -->
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-api</artifactId>
-                <version>5.9.0</version> <!-- Aktuelle Version von JUnit 5 -->
+                <artifactId>junit-jupiter</artifactId>
+                <version>RELEASE</version>
                 <scope>test</scope>
             </dependency>
-
-            <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter-engine</artifactId>
-                <version>5.9.0</version>
-                <scope>test</scope>
-            </dependency>
-
 
     </dependencies>
 
