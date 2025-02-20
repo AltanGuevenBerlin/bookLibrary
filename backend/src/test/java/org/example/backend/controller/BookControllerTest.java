@@ -100,7 +100,10 @@ class BookControllerTest {
         Book existingBook = new Book("1", "Old Title", "Old Author", "Fiction", "2020");
         BookUpdateDTO updateDTO = new BookUpdateDTO("New Title", "New Author", "Drama", "2023");
 
+        // Stelle sicher, dass das Repository korrekt die alte Buch-ID zurückgibt
         when(repo.findById("1")).thenReturn(java.util.Optional.of(existingBook));
+
+        // Stub das Save-Verfahren, um das aktualisierte Buch zurückzugeben
         when(repo.save(any(Book.class))).thenReturn(
                 new Book("1", "New Title", "New Author", "Drama", "2023")
         );
@@ -108,7 +111,7 @@ class BookControllerTest {
         // WHEN & THEN
         mvc.perform(put("/api/book/update/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(updateDTO)))
+                        .content(new ObjectMapper().writeValueAsString(updateDTO))) // updateDTO als Request-Body
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value("1"))
@@ -117,6 +120,8 @@ class BookControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.genre").value("Drama"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.publicationYear").value("2023"));
     }
+
+
     @Test
     void deleteBook_shouldReturnNoContent_whenBookExists() throws Exception {
         // GIVEN

@@ -1,5 +1,6 @@
 package org.example.backend.service;
 
+import org.example.backend.dto.BookUpdateDTO;
 import org.example.backend.model.Book;
 import org.example.backend.repo.BookRepository;
 import org.example.backend.service.BookServiceImpl;
@@ -103,32 +104,41 @@ class BookServiceTest {
     @Test
     void testUpdateBook() {
         // Arrange
-        Book updatedBook = new Book("1", "Updated Title", "Updated Author", "Updated Genre", "2024");
-        when(bookRepository.findById("1")).thenReturn(Optional.of(book));
-        when(bookRepository.save(any(Book.class))).thenReturn(updatedBook);
+        Book existingBook = new Book("1", "Old Title", "Old Author", "Old Genre", "2020");
+        BookUpdateDTO updateDTO = new BookUpdateDTO("Updated Title", "Updated Author", "Updated Genre", "2024");
+
+        // Stelle sicher, dass das Repository das vorhandene Buch zurückgibt
+        when(bookRepository.findById("1")).thenReturn(Optional.of(existingBook));
+        when(bookRepository.save(any(Book.class))).thenReturn(new Book("1", "Updated Title", "Updated Author", "Updated Genre", "2024"));
 
         // Act
-        Book result = bookService.updateBook(updatedBook);
+        Book result = bookService.updateBook("1", updateDTO);  // Passe hier die Argumente an
 
         // Assert
         assertNotNull(result);
         assertEquals("Updated Title", result.getTitle());
+        assertEquals("Updated Author", result.getAuthor());
+        assertEquals("Updated Genre", result.getGenre());
+        assertEquals("2024", result.getPublicationYear());
         verify(bookRepository, times(1)).findById("1");
-        verify(bookRepository, times(1)).save(updatedBook);
+        verify(bookRepository, times(1)).save(any(Book.class));
     }
 
     @Test
     void testUpdateBookNotFound() {
         // Arrange
-        Book updatedBook = new Book("1", "Updated Title", "Updated Author", "Updated Genre", "2024");
+        BookUpdateDTO updateDTO = new BookUpdateDTO("Updated Title", "Updated Author", "Updated Genre", "2024");
+
+        // Das Buch existiert nicht
         when(bookRepository.findById("1")).thenReturn(Optional.empty());
 
         // Act
-        Book result = bookService.updateBook(updatedBook);
+        Book result = bookService.updateBook("1", updateDTO);
 
         // Assert
         assertNull(result);
         verify(bookRepository, times(1)).findById("1");
         verify(bookRepository, times(0)).save(any(Book.class));
     }
+
 }
