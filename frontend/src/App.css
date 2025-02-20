@@ -1,0 +1,173 @@
+/* Grundlegendes Layout */
+#root {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+  background-color: #f4f6f9; /* Sanftes Hintergrundgrau */
+  min-height: 100vh;
+}
+
+/* Logo */
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  transition: transform 300ms ease, filter 300ms ease;
+  cursor: pointer;
+}
+.logo:hover {
+  transform: scale(1.1); /* Vergrößerungseffekt */
+  filter: drop-shadow(0 0 2em rgba(0, 150, 255, 0.6));
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em rgba(97, 218, 250, 0.7)); /* React-spezifischer Hover-Effekt */
+}
+
+/* Animation für das Logo (optional) */
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+/* Kartenelemente für Bücher */
+.card {
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 2em;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2em;
+  transition: box-shadow 300ms ease;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Titel */
+h1 {
+  color: #2c3e50; /* Dunkles Blau für einen professionellen Look */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+h3 {
+  color: #34495e; /* Dunkleres Grau für subtile Akzente */
+  font-family: 'Arial', sans-serif;
+  font-size: 1.5rem;
+}
+
+/* Artikel */
+article {
+  border: 2px solid #bdc3c7;
+  border-radius: 10px;
+  margin: 15px;
+  padding: 15px;
+  background-color: #ecf0f1;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Buttons */
+button {
+  background-color: #3498db; /* Helles Blau */
+  color: #fff;
+  padding: 0.8em 2em;
+  border: none;
+  border-radius: 30px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 300ms ease, transform 200ms ease;
+  margin-top: 1em;
+}
+
+button:hover {
+  background-color: #2980b9; /* Dunkleres Blau für Hover-Effekt */
+  transform: translateY(-2px); /* Kleiner Hebe-Effekt */
+}
+
+button:active {
+  transform: translateY(2px); /* Kleinere "Klick"-Bewegung */
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(52, 152, 219, 0.7); /* Sanfte Umrandung bei Fokus */
+}
+
+/* Footer */
+footer {
+  background-color: #2c3e50;
+  color: white;
+  padding: 1rem;
+  font-size: 1rem;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+/* Hintergrund */
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f4f6f9;
+  color: #2c3e50;
+  margin: 0;
+  padding: 0;
+}
+
+/* Suchformular */
+input[type="text"], input[type="number"] {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #bdc3c7;
+  border-radius: 5px;
+  width: 80%;
+  margin: 1em 0;
+  transition: border-color 200ms ease;
+}
+
+input[type="text"]:focus, input[type="number"]:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+input[type="submit"] {
+  background-color: #3498db;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+input[type="submit"]:hover {
+  background-color: #2980b9;
+}
+
+/* Karten und Artikelansicht */
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 20px;
+}
+
+.article-title {
+  color: #3498db;
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
