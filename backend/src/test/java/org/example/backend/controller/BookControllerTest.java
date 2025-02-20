@@ -35,6 +35,7 @@ class BookControllerTest {
     @Autowired
     private MockMvc mvc;
 
+    @MockBean
     private BookRepository repo;
 
     @Test
@@ -131,5 +132,7 @@ class BookControllerTest {
                 .andDo(print())
                 .andExpect(status().isNoContent());
     }
+
+
 
 }
