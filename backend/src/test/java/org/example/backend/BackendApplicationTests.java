@@ -8,6 +8,8 @@ class BackendApplicationTests {
 
     @Test
     void contextLoads() {
+        // Die Methode bleibt leer, weil sie nur sicherstellt, dass der Anwendungskontext geladen wird.
+
     }
 
 }
