@@ -40,25 +40,8 @@ public class BookController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Book> updateBook(@PathVariable String id, @RequestBody BookUpdateDTO updateDTO) {
-        Book existingBook = bookService.getBookById(id);
-        if (existingBook != null) {
-            if (updateDTO.getTitle() != null) {
-                existingBook.setTitle(updateDTO.getTitle());
-            }
-            if (updateDTO.getAuthor() != null) {
-                existingBook.setAuthor(updateDTO.getAuthor());
-            }
-            if (updateDTO.getGenre() != null) {
-                existingBook.setGenre(updateDTO.getGenre());
-            }
-            if (updateDTO.getPublicationYear() != null) {
-                existingBook.setPublicationYear(updateDTO.getPublicationYear());
-            }
-            Book updatedBook = bookService.updateBook(existingBook);
-            return ResponseEntity.ok(updatedBook);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        Book updatedBook = bookService.updateBook(id, updateDTO);
+        return updatedBook != null ? ResponseEntity.ok(updatedBook) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/delete/{id}")

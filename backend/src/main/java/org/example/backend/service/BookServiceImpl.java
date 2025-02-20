@@ -1,6 +1,7 @@
 package org.example.backend.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.backend.dto.BookUpdateDTO;
 import org.example.backend.model.Book;
 import org.example.backend.repo.BookRepository;
 import org.springframework.stereotype.Service;
@@ -29,17 +30,23 @@ public class BookServiceImpl implements BookService {
         bookRepository.deleteById(id);
     }
 
-    public Book updateBook(Book book) {
-        Book updatedBook = bookRepository.findById(book.getId()).orElse(null);
-        if (updatedBook != null) {
-            updatedBook.setTitle(book.getTitle());
-            updatedBook.setAuthor(book.getAuthor());
-            updatedBook.setGenre(book.getGenre());
-            updatedBook.setPublicationYear(book.getPublicationYear());
-            return bookRepository.save(updatedBook);
-        } else {
-            return null;
-        }
+    public Book updateBook(String id, BookUpdateDTO updateDTO) {
+        return bookRepository.findById(id).map(existingBook -> {
+            if (updateDTO.getTitle() != null) {
+                existingBook.setTitle(updateDTO.getTitle());
+            }
+            if (updateDTO.getAuthor() != null) {
+                existingBook.setAuthor(updateDTO.getAuthor());
+            }
+            if (updateDTO.getGenre() != null) {
+                existingBook.setGenre(updateDTO.getGenre());
+            }
+            if (updateDTO.getPublicationYear() != null) {
+                existingBook.setPublicationYear(updateDTO.getPublicationYear());
+            }
+            return bookRepository.save(existingBook);
+        }).orElse(null);
     }
+
 
 }
